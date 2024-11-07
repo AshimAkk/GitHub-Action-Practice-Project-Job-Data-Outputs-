@@ -28,11 +28,11 @@ jobs:
         #store artifacts
         # path shows where to find the files that should be stored
         # stored the generated output under the dist-files identifier
-      - name: upload artifacts
+      - name: upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: dist-files
-          path: dist
+          name: artifact-files
+          path: assets
         
   deploy:
     needs: build
