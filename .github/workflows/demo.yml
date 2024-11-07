@@ -9,6 +9,11 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: caching dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: dep-modules-${{hashFiles('**/package.lock.josn')}}
       - name: Install dependencies
         run: npm ci
       - name: Lint code
@@ -29,9 +34,9 @@ jobs:
         run: npm run build
       - name: Publish JS
         id: publish
-        run: find dist/assets/*.js -type f -execdir echo 'publish-file={}'>> $GITHUB_OUTPUT ';'  #Outputs the filename
+        run: find dist/assets/*.js -type f -execdir echo 'publish-file={}'>> $GITHUB_OUTPUT ';' #Outputs the filename
         #scipt-file, can be anyname as the output is still going to be called what was specified in the outputs key
-        #GITHUB_OUTPUT targets a special file created by github in the environment 
+        #GITHUB_OUTPUT targets a special file created by github in the environment
         # in which your job runs where the output key value pair is written to
         # step. is a key value with information about your steps
         # steps. allow you to access the context, by giving our step a unique id, by adding the ID field to it
@@ -53,7 +58,7 @@ jobs:
           name: artifact-files
       - name: Output contents
         run: ls
-      - name: Output file name 
+      - name: Output file name
         run: echo "${{needs.build.outputs.script-file}}"
       - name: Deploy
         run: echo "Deploying..."
